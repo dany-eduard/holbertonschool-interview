@@ -1,8 +1,12 @@
 0x05. Linked list palindrome
 ===================
 
+![output](https://user-images.githubusercontent.com/54107524/130509543-29968177-a5ab-454e-b26f-2b98630ac611.png)
+
 Task
 ---------
+
+
 
 ### 0. Linked list palindrome
 
