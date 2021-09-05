@@ -1,48 +1,59 @@
 #!/usr/bin/python3
+
 """
-Task - Script that reads stdin line by line and computes metrics
+Log Parser
 """
+
 
 import sys
 
 
-if __name__ == "__main__":
-    st_code = {"200": 0,
-               "301": 0,
-               "400": 0,
-               "401": 0,
-               "403": 0,
-               "404": 0,
-               "405": 0,
-               "500": 0}
-    count = 1
-    file_size = 0
+total_file_size = {'size': 0}
+codes = {
+    '200': 0,
+    '301': 0,
+    '400': 0,
+    '401': 0,
+    '403': 0,
+    '404': 0,
+    '405': 0,
+    '500': 0
+}
 
-    def parse_line(line):
-        """ Read, parse and grab data"""
-        try:
-            parsed_line = line.split()
-            status_code = parsed_line[-2]
-            if status_code in st_code.keys():
-                st_code[status_code] += 1
-            return int(parsed_line[-1])
-        except Exception:
-            return 0
 
-    def print_stats():
-        """print stats in ascending order"""
-        print("File size: {}".format(file_size))
-        for key in sorted(st_code.keys()):
-            if st_code[key]:
-                print("{}: {}".format(key, st_code[key]))
+def print_data():
+    """
+        Prints the resume
+    """
+    print('File size: {}'.format(total_file_size['size']))
+    for key in sorted(codes.keys()):
+        if codes[key] > 0:
+            print('{}: {}'.format(key, codes[key]))
 
+
+def operate_resume(line):
+    """
+        Operates with the resume stats
+    """
+    try:
+        line = line.split(' ')
+        size = line[-1]
+        total_file_size['size'] += int(size)
+        if line[-2] in codes:
+            codes[line[-2]] += 1
+    except Exception as e:
+        pass
+
+
+if __name__ == '__main__':
+    num_lines = 1
     try:
         for line in sys.stdin:
-            file_size += parse_line(line)
-            if count % 10 == 0:
-                print_stats()
-            count += 1
+            operate_resume(line)
+            if num_lines % 10 == 0:
+                print_data()
+            num_lines += 1
     except KeyboardInterrupt:
-        print_stats()
+        print_data()
         raise
-    print_stats()
+    print_data()
